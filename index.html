@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>FLASH XXV PERSEVERANCE 2026 - SMA Negeri Modal Bangsa</title>
+  <meta name="description" content="Landing Page Resmi FLASH XXV PERSEVERANCE 2026 SMA Negeri Modal Bangsa. Event kompetisi nasional jenjang SD, SMP, SMA, dan Umum bertema 8-Bit Flappy Bird Retro Arcade.">
+  
+  <!-- Google Fonts: Retro 8-bit & Modern Readable Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="pixel-theme">
+
+  <!-- ==================== TOP TICKER / NOTIFICATION ==================== -->
+  <div class="top-ticker" id="topTicker">
+    <div class="ticker-content">
+      <span>★ PENDAFTARAN RESMI FLASH XXV TELAH DIBUKA! ★ TOTAL 21 CABANG LOMBA TINGKAT SD, SMP, SMA & UMUM TAHUN 2026 ★ SATUKAN SEMANGAT, RAIH KEMENANGAN! ★</span>
+    </div>
+  </div>
+
+  <!-- ==================== STICKY RETRO NAVBAR ==================== -->
+  <nav class="pixel-navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-logo" aria-label="FLASH XXV Homepage">
+        <div class="pixel-bird-icon" aria-hidden="true"></div>
+        <div class="brand-text">
+          <span class="brand-title">FLASH XXV</span>
+          <span class="brand-sub">PERSEVERANCE</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <div class="nav-links">
+        <a href="#about" class="nav-item">TENTANG</a>
+        <a href="#schedule" class="nav-item">JADWAL</a>
+        <a href="#competitions" class="nav-item">LOMBA</a>
+        <a href="#arcade-section" class="nav-item highlight-link">MINI-GAME</a>
+        <a href="#faq" class="nav-item">FAQ</a>
+        <a href="#downloads" class="nav-item">BERKAS</a>
+        <a href="#contact" class="nav-item">KONTAK</a>
+      </div>
+
+      <!-- Nav Actions (Sound Toggle & CTA) -->
+      <div class="nav-actions">
+        <button id="soundToggleBtn" class="pixel-btn-icon" title="Toggle Efek Suara 8-Bit" aria-label="Toggle Sound">
+          <span id="soundIcon">🔊</span>
+        </button>
+        <a href="#competitions" class="pixel-btn pixel-btn-green nav-cta">DAFTAR</a>
+        
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuBtn" class="pixel-btn-icon mobile-only" aria-label="Buka Menu Navigasi">
+          <span id="menuIcon">☰</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div class="mobile-dropdown" id="mobileDropdown">
+      <a href="#about" class="mob-item">📜 TENTANG</a>
+      <a href="#schedule" class="mob-item">📅 JADWAL EVENT</a>
+      <a href="#competitions" class="mob-item">🏆 21 CABANG LOMBA</a>
+      <a href="#arcade-section" class="mob-item highlight">🎮 MAINKAN FLAPPY BIRD</a>
+      <a href="#faq" class="mob-item">❓ FREQUENTLY ASKED QUESTIONS</a>
+      <a href="#downloads" class="mob-item">📥 UNDUH RUNDOWN & JUKNIS</a>
+      <a href="#contact" class="mob-item">📞 KONTAK RESMI</a>
+      <a href="#competitions" class="pixel-btn pixel-btn-green w-full text-center mt-2">DAFTAR SEKARANG</a>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO SECTION (FLAPPY RETRO SKY) ==================== -->
+  <header class="hero-section">
+    <!-- Animated Pixel Cloud & Horizon Layers -->
+    <div class="parallax-clouds"></div>
+    <div class="pixel-skyline"></div>
+
+    <div class="hero-content">
+      <div class="school-badge">
+        <span class="star-icon">★</span> SMA NEGERI MODAL BANGSA <span class="star-icon">★</span>
+      </div>
+
+      <div class="hero-titles">
+        <h1 class="main-title">
+          <span class="text-flash">FLASH XXV</span>
+          <span class="text-perseverance">PERSEVERANCE</span>
+        </h1>
+        <p class="event-tagline">"Satukan semangat, raih kemenangan"</p>
+        <p class="event-desc">
+          Membuka gerbang baru menuju dunia yang penuh dengan petualangan, keberanian, dan semangat eksplorasi berskala nasional.
+        </p>
+      </div>
+
+      <!-- Mascot & Space Hint Animation -->
+      <div class="hero-mascot-wrapper">
+        <div class="floating-pixel-bird"></div>
+        <div class="hero-bubble">
+          <span>Tekan <strong>SPACE</strong> untuk melompat tinggi meraih prestasi!</span>
+        </div>
+      </div>
+
+      <!-- Hero Action Buttons -->
+      <div class="hero-buttons">
+        <a href="#competitions" class="pixel-btn pixel-btn-gold">
+          <span>🏆 PILIH CABANG LOMBA</span>
+        </a>
+        <a href="#arcade-section" class="pixel-btn pixel-btn-blue">
+          <span>🎮 MAINKAN MINI-GAME</span>
+        </a>
+        <a href="#downloads" class="pixel-btn pixel-btn-dark">
+          <span>📥 UNDUH RUNDOWN & JUKNIS</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Retro Pipe Bottom Border Divider -->
+    <div class="pixel-divider-pipes">
+      <div class="pixel-ground-stripe"></div>
+    </div>
+  </header>
+
+  <!-- ==================== STATS SCOREBOARD SECTION ==================== -->
+  <section class="stats-scoreboard">
+    <div class="container">
+      <div class="scoreboard-frame">
+        <div class="stat-card">
+          <div class="stat-icon">🎖️</div>
+          <div class="stat-number" data-count="25">25</div>
+          <div class="stat-label">EDISI PENYELENGGARAAN</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-number" data-count="1500">1500+</div>
+          <div class="stat-label">TARGET PESERTA LOMBA</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎮</div>
+          <div class="stat-number" data-count="21">21</div>
+          <div class="stat-label">CABANG PERLOMBAAN</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏅</div>
+          <div class="stat-number" data-count="4">4</div>
+          <div class="stat-label">JENJANG (SD, SMP, SMA, UMUM)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT EVENT (MISSION BRIEFING) ==================== -->
+  <section id="about" class="about-section">
+    <div class="container">
+      <div class="pixel-window-card">
+        <div class="window-header">
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="window-title">QUEST_BRIEFING: ABOUT_FLASH_XXV.TXT</div>
+        </div>
+        <div class="window-body">
+          <div class="about-grid">
+            <div class="about-text-col">
+              <span class="pixel-tag">LATAR BELAKANG EVENT</span>
+              <h2 class="section-title">MENGENAL FLASH XXV PERSEVERANCE</h2>
+              <p class="lead-text">
+                <strong>FLASH (Flamboyant Science and Art Show) XXV PERSEVERANCE</strong> adalah agenda akbar tahunan yang diselenggarakan oleh <strong>SMA Negeri Modal Bangsa</strong> (Aceh Besar) bertaraf nasional.
+              </p>
+              <p>
+                Kata <strong>PERSEVERANCE</strong> melambangkan ketekunan, daya juang gigih, dan semangat pantang menyerah dalam menghadapi rintangan — layaknya burung pengelana yang gigih mengepakkan sayap menembus setiap celah rintangan pipa untuk mencapai puncak tertinggi.
+              </p>
+              <div class="quote-box">
+                <span class="quote-mark">“</span>
+                <em>Satukan semangat, raih kemenangan. Hadapi tantangan dengan kreativitas, intelektualitas, dan sportivitas tanpa batas!</em>
+              </div>
+            </div>
+
+            <div class="about-feature-col">
+              <div class="feature-box">
+                <div class="f-icon">🎯</div>
+                <div class="f-info">
+                  <h3>Skala Nasional</h3>
+                  <p>Mewadahi talenta muda terbaik dari seluruh pelosok Nusantara.</p>
+                </div>
+              </div>
+              <div class="feature-box">
+                <div class="f-icon">⚖️</div>
+                <div class="f-info">
+                  <h3>Penjurian Netral</h3>
+                  <p>Dinilai langsung oleh akademisi, praktisi profesional, dan juri independen.</p>
+                </div>
+              </div>
+              <div class="feature-box">
+                <div class="f-icon">💰</div>
+                <div class="f-info">
+                  <h3>Total Hadiah Puluhan Juta</h3>
+                  <p>Trofi bergengsi, sertifikat nasional, dan dana pembinaan jutaan rupiah.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TIMELINE / JADWAL SECTION ==================== -->
+  <section id="schedule" class="schedule-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="pixel-tag">EVENT MILESTONES</span>
+        <h2 class="section-title">TIMELINE & JADWAL RUNDOWN</h2>
+        <p class="section-subtitle">Catat setiap level tanggal penting dan jangan sampai terlewat!</p>
+      </div>
+
+      <div class="level-timeline">
+        <!-- Level 1 -->
+        <div class="level-card">
+          <div class="level-badge">STAGE 01</div>
+          <div class="level-pipe-node">🚩</div>
+          <h3 class="level-title">Pembukaan Pendaftaran</h3>
+          <div class="level-date">11 AGUSTUS 2026</div>
+          <p class="level-desc">Registrasi online dibuka secara resmi untuk seluruh cabang lomba tingkat SD, SMP, SMA, & Umum.</p>
+        </div>
+
+        <!-- Level 2 -->
+        <div class="level-card">
+          <div class="level-badge">STAGE 02</div>
+          <div class="level-pipe-node">⏳</div>
+          <h3 class="level-title">Penutupan Pendaftaran</h3>
+          <div class="level-date">1 SEPTEMBER 2026</div>
+          <p class="level-desc">Batas akhir pengisian formulir pendaftaran daring dan konfirmasi pembayaran kuota peserta.</p>
+        </div>
+
+        <!-- Level 3 -->
+        <div class="level-card">
+          <div class="level-badge">STAGE 03</div>
+          <div class="level-pipe-node">📋</div>
+          <h3 class="level-title">Technical Meeting (TM)</h3>
+          <div class="level-date">3 SEPTEMBER 2026</div>
+          <p class="level-desc">Pemaparan petunjuk teknis (Juknis), tata tertib lomba, dan pengundian nomor urut peserta.</p>
+        </div>
+
+        <!-- Level 4 -->
+        <div class="level-card final-stage">
+          <div class="level-badge">FINAL STAGE</div>
+          <div class="level-pipe-node">🏆</div>
+          <h3 class="level-title">Pelaksanaan Acara Akbar</h3>
+          <div class="level-date">5 - 9 SEPTEMBER 2026</div>
+          <p class="level-desc">Rangkaian perlombaan serentak, bazar kreativitas, expo karya, pentas seni, dan Grand Closing Ceremony.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EMBEDDED PLAYABLE MINI-GAME ==================== -->
+  <section id="arcade-section" class="arcade-arena-section">
+    <div class="container">
+      <div class="arcade-cabinet-wrapper">
+        <div class="arcade-marquee">
+          <span class="marquee-star">★</span>
+          <h2>FLAPPY FLASH ARCADE ZONE</h2>
+          <span class="marquee-star">★</span>
+        </div>
+
+        <div class="arcade-body">
+          <div class="arcade-screen-bezel">
+            <canvas id="landingGameCanvas" width="288" height="480"></canvas>
+            
+            <div class="arcade-screen-overlay" id="arcadeOverlay">
+              <div class="screen-instructions">
+                <p class="arcade-blink">TEKAN SPACE / KLIK</p>
+                <p class="arcade-sub">UNTUK MEMULAI GAME</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="arcade-control-panel">
+            <div class="control-key-display">
+              <span class="key-cap" id="spaceKeyCap">SPACE</span>
+              <span class="key-desc">Lompat / Kepakkan Sayap</span>
+            </div>
+            <div class="arcade-scores">
+              <div class="score-slot">
+                <span class="score-label">SKOR</span>
+                <span class="score-val" id="miniCurrentScore">0</span>
+              </div>
+              <div class="score-slot">
+                <span class="score-label">TERBAIK</span>
+                <span class="score-val" id="miniHighScore">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arcade-footer-text">
+          <span>🕹️ Uji ketangkasan dan fokusmu sebelum bertanding di FLASH XXV PERSEVERANCE!</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 21 CABANG LOMBA SECTION ==================== -->
+  <section id="competitions" class="competitions-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="pixel-tag">BOARD OF COMPETITIONS</span>
+        <h2 class="section-title">21 CABANG PERLOMBAAN NASIONAL</h2>
+        <p class="section-subtitle">
+          Pilih jenjang pendidikanmu, pelajari syarat lomba, dan klik pada kartu untuk membuka formulir pendaftaran serta Juknis resmi!
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs & Search -->
+      <div class="competition-controls">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-btn active" data-category="ALL">SEMUA (21)</button>
+          <button class="filter-btn" data-category="SD">SD / MI (2)</button>
+          <button class="filter-btn" data-category="SMP">SMP / MTs (10)</button>
+          <button class="filter-btn" data-category="SMA">SMA / MA / SMK (5)</button>
+          <button class="filter-btn" data-category="Umum">UMUM (4)</button>
+        </div>
+
+        <div class="search-box-wrapper">
+          <input type="text" id="competitionSearch" placeholder="🔍 Cari nama lomba..." class="pixel-input">
+        </div>
+      </div>
+
+      <!-- Competitions Grid Container -->
+      <div class="competitions-grid" id="competitionsGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ SECTION ==================== -->
+  <section id="faq" class="faq-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="pixel-tag">TANYA JAWAB</span>
+        <h2 class="section-title">FREQUENTLY ASKED QUESTIONS</h2>
+        <p class="section-subtitle">Pertanyaan yang sering diajukan seputar FLASH XXV PERSEVERANCE</p>
+      </div>
+
+      <div class="faq-accordion-container">
+        <!-- FAQ 1 -->
+        <details class="pixel-accordion">
+          <summary>
+            <span class="faq-q">Apakah peserta dari luar daerah ditanggung akomodasi dan konsumsinya?</span>
+            <span class="faq-arrow">▼</span>
+          </summary>
+          <div class="faq-body">
+            <p>
+              <strong>Tidak.</strong> Seluruh biaya akomodasi, transportasi, dan kebutuhan pribadi peserta di luar fasilitas resmi perlombaan tidak ditanggung oleh panitia. Namun, panitia menyediakan seksi <em>Pusat Informasi & Konsumsi</em> untuk membantu arahan lokasi penginapan terdekat di sekitar Bandara SIM / Aceh Besar serta kebutuhan konsumsi harian lomba.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 2 -->
+        <details class="pixel-accordion">
+          <summary>
+            <span class="faq-q">Bagaimana metode pembayaran dan rekening resmi pendaftaran?</span>
+            <span class="faq-arrow">▼</span>
+          </summary>
+          <div class="faq-body">
+            <p>
+              Pembayaran uang pendaftaran dilakukan via transfer bank resmi ke:
+            </p>
+            <div class="bank-card">
+              <div class="bank-name">BANK SYARIAH INDONESIA (BSI)</div>
+              <div class="bank-number">7219049204</div>
+              <div class="bank-holder">a.n. OSIS SMAN Modal Bangsa</div>
+            </div>
+            <p class="mt-2 text-sm text-muted">
+              Pastikan Anda mengunggah bukti transfer resmi saat mengisi Google Form pendaftaran.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 3 -->
+        <details class="pixel-accordion">
+          <summary>
+            <span class="faq-q">Bolehkah satu peserta mendaftar lebih dari satu cabang lomba?</span>
+            <span class="faq-arrow">▼</span>
+          </summary>
+          <div class="faq-body">
+            <p>
+              <strong>Boleh</strong>, selama jadwal pelaksanaan babak lomba tersebut tidak saling berbenturan dan peserta memenuhi kualifikasi serta persyaratan umum di masing-masing cabang lomba.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 4 -->
+        <details class="pixel-accordion">
+          <summary>
+            <span class="faq-q">Siapa yang menjadi dewan juri dalam perlombaan FLASH XXV?</span>
+            <span class="faq-arrow">▼</span>
+          </summary>
+          <div class="faq-body">
+            <p>
+              Untuk menjaga integritas, netralitas, dan objektivitas penilaian, seluruh dewan juri FLASH XXV berasal dari pihak <strong>profesional eksternal</strong>, akademisi perguruan tinggi, sastrawan, serta praktisi independen yang ahli dan tersertifikasi di bidangnya masing-masing.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DOWNLOADS SECTION ==================== -->
+  <section id="downloads" class="downloads-section">
+    <div class="container">
+      <div class="download-banner-card">
+        <div class="banner-icon-side">
+          <div class="pixel-folder-icon">📂</div>
+        </div>
+        <div class="banner-text-side">
+          <span class="pixel-tag">DOWNLOAD CENTER</span>
+          <h2 class="banner-title">BERKAS & DOKUMEN RESMI</h2>
+          <p class="banner-desc">Unduh jadwal lengkap serta buku panduan petunjuk teknis (Juknis) resmi FLASH XXV PERSEVERANCE dalam format PDF.</p>
+          <div class="download-buttons">
+            <a href="https://drive.google.com/file/d/1TiVtl-RflHyk1CBbbdTJMqQ-fkUuMdUr/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="pixel-btn pixel-btn-green">
+              <span>📅 UNDUH RUNDOWN EVENT (PDF)</span>
+            </a>
+            <a href="https://drive.google.com/drive/folders/1sXRN3mZZB25PzFIrPjXCWHXKqwNfRw7M?usp=sharing" target="_blank" rel="noopener noreferrer" class="pixel-btn pixel-btn-gold">
+              <span>📜 FOLDER JUKNIS LENGKAP (DRIVE)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT & FOOTER ==================== -->
+  <footer id="contact" class="pixel-footer">
+    <div class="pixel-ground-decor"></div>
+    <div class="container footer-content">
+      <div class="footer-grid">
+        <!-- Col 1: About MOSA -->
+        <div class="footer-col">
+          <div class="footer-brand">
+            <div class="pixel-bird-icon mini"></div>
+            <span class="footer-title">FLASH XXV PERSEVERANCE</span>
+          </div>
+          <p class="footer-text">
+            Event tahunan akbar SMA Negeri Modal Bangsa berskala nasional. Wadah kompetisi, kreasi, dan sportivitas generasi penerus bangsa.
+          </p>
+          <div class="tagline-badge">"Satukan semangat, raih kemenangan"</div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">NAVIGASI</h4>
+          <ul class="footer-links">
+            <li><a href="#about">Tentang FLASH XXV</a></li>
+            <li><a href="#schedule">Jadwal & Rundown</a></li>
+            <li><a href="#competitions">21 Cabang Lomba</a></li>
+            <li><a href="#arcade-section">Mini Game Arcade</a></li>
+            <li><a href="#faq">Pertanyaan Umum (FAQ)</a></li>
+            <li><a href="#downloads">Berkas & Juknis</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Social & Contact -->
+        <div class="footer-col">
+          <h4 class="footer-heading">HUBUNGI KAMI</h4>
+          <ul class="contact-info-list">
+            <li>
+              <span class="c-icon">📍</span>
+              <span>SMA Negeri Modal Bangsa, Jl. Bandara Sultan Iskandar Muda, Blang Bintang, Aceh Besar, Aceh.</span>
+            </li>
+            <li>
+              <span class="c-icon">📞</span>
+              <span>CP FLASH: <a href="tel:+6281360056023">+62 813-6005-6023</a></span>
+            </li>
+            <li>
+              <span class="c-icon">📷</span>
+              <span>Instagram: <a href="https://instagram.com/flashmosa" target="_blank" rel="noopener">@flashmosa</a></span>
+            </li>
+            <li>
+              <span class="c-icon">🎵</span>
+              <span>TikTok: <a href="https://www.tiktok.com/@flashmosa" target="_blank" rel="noopener">@flashmosa</a></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 FLASH XXV PERSEVERANCE • SMA Negeri Modal Bangsa. Dibuat dengan tema Flappy Bird Retro Pixel.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== REGISTRATION DETAIL MODAL POPUP ==================== -->
+  <div class="pixel-modal-backdrop" id="competitionModal" aria-hidden="true">
+    <div class="pixel-modal-window">
+      <div class="modal-header-bar">
+        <span class="modal-badge-title">★ COMPETITION REGISTRATION ★</span>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Tutup Rincian">✕</button>
+      </div>
+
+      <div class="modal-body-content">
+        <div class="modal-hero-badge">
+          <span class="modal-abbr" id="modalAbbr">CODE</span>
+          <span class="modal-category" id="modalCategory">KATEGORI: SMA</span>
+        </div>
+
+        <h3 class="modal-competition-title" id="modalTitle">Nama Cabang Lomba</h3>
+        
+        <div class="modal-divider-dots"></div>
+
+        <!-- Person in Charge Info Box -->
+        <div class="modal-pj-card">
+          <div class="pj-avatar">👤</div>
+          <div class="pj-info">
+            <span class="pj-label">PENANGGUNG JAWAB (PJ LOMBA):</span>
+            <div class="pj-name" id="modalPjName">Nama PJ Lomba</div>
+            <div class="pj-phone">
+              <span>📞 WhatsApp:</span>
+              <a href="#" id="modalPjPhoneLink" target="_blank" rel="noopener" class="phone-link">0812-XXXX-XXXX</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Links -->
+        <div class="modal-actions">
+          <a href="#" id="modalFormBtn" target="_blank" rel="noopener" class="pixel-btn pixel-btn-green w-full text-center">
+            <span>📝 ISI FORMULIR PENDAFTARAN RESMI</span>
+          </a>
+          <a href="#" id="modalJuknisBtn" target="_blank" rel="noopener" class="pixel-btn pixel-btn-gold w-full text-center">
+            <span>📜 UNDUH JUKNIS LOMBA (PDF)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="app.js"></script>
+</body>
+</html>
