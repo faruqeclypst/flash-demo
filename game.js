@@ -999,6 +999,36 @@ window.addEventListener('keyup', (e) => {
   }
 });
 
+// Fullscreen Toggle (Tekan F atau Double-Click)
+function toggleStandaloneFullscreen() {
+  const target = document.querySelector('.arcade-container') || canvas;
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (target.requestFullscreen) {
+      target.requestFullscreen().catch(() => {});
+    } else if (target.webkitRequestFullscreen) {
+      target.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'KeyF') {
+    e.preventDefault();
+    toggleStandaloneFullscreen();
+  }
+});
+
+canvas.addEventListener('dblclick', (e) => {
+  e.preventDefault();
+  toggleStandaloneFullscreen();
+});
+
 canvas.addEventListener('pointerdown', (e) => {
   e.preventDefault();
   handleAction();

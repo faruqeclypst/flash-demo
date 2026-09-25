@@ -1060,14 +1060,102 @@ function handleMiniAction() {
   }
 }
 
-// Input Listener Tombol Space
-window.addEventListener('keydown', (e) => {
-  if (e.code === 'Space') {
-    if (document.activeElement !== searchInput) {
-      e.preventDefault();
-      if (spaceKeyCap) spaceKeyCap.classList.add('pressed');
-      handleMiniAction();
+// FULLSCREEN LOGIC FOR ARCADE
+const arcadeCabinet = document.getElementById('arcadeCabinet');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+const exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
+const fullscreenIcon = document.getElementById('fullscreenIcon');
+
+function isFullscreenActive() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement || arcadeCabinet?.classList.contains('is-fullscreen'));
+}
+
+function enterFullscreenMode() {
+  retroAudio.init();
+  retroAudio.playBeep(600, 0.06);
+
+  if (arcadeCabinet) {
+    if (arcadeCabinet.requestFullscreen) {
+      arcadeCabinet.requestFullscreen().catch(() => {
+        arcadeCabinet.classList.add('is-fullscreen');
+      });
+    } else if (arcadeCabinet.webkitRequestFullscreen) {
+      arcadeCabinet.webkitRequestFullscreen();
+    } else {
+      arcadeCabinet.classList.add('is-fullscreen');
     }
+    if (fullscreenIcon) fullscreenIcon.textContent = '🗗';
+  }
+}
+
+function exitFullscreenMode() {
+  retroAudio.init();
+  retroAudio.playBeep(400, 0.06);
+
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+  arcadeCabinet?.classList.remove('is-fullscreen');
+  if (fullscreenIcon) fullscreenIcon.textContent = '⛶';
+}
+
+function toggleArcadeFullscreen() {
+  if (isFullscreenActive()) {
+    exitFullscreenMode();
+  } else {
+    enterFullscreenMode();
+  }
+}
+
+fullscreenBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleArcadeFullscreen();
+});
+
+fullscreenToggleBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleArcadeFullscreen();
+});
+
+exitFullscreenBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  exitFullscreenMode();
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    arcadeCabinet?.classList.remove('is-fullscreen');
+    if (fullscreenIcon) fullscreenIcon.textContent = '⛶';
+  } else {
+    if (fullscreenIcon) fullscreenIcon.textContent = '🗗';
+  }
+});
+
+document.addEventListener('webkitfullscreenchange', () => {
+  if (!document.webkitFullscreenElement) {
+    arcadeCabinet?.classList.remove('is-fullscreen');
+    if (fullscreenIcon) fullscreenIcon.textContent = '⛶';
+  } else {
+    if (fullscreenIcon) fullscreenIcon.textContent = '🗗';
+  }
+});
+
+// Input Listener Tombol Keyboard (SPACE & F untuk Fullscreen)
+window.addEventListener('keydown', (e) => {
+  if (document.activeElement === searchInput) return;
+
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (spaceKeyCap) spaceKeyCap.classList.add('pressed');
+    handleMiniAction();
+  } else if (e.code === 'KeyF') {
+    e.preventDefault();
+    toggleArcadeFullscreen();
   }
 });
 

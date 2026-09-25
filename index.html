@@ -259,17 +259,25 @@
   <!-- ==================== EMBEDDED PLAYABLE MINI-GAME ==================== -->
   <section id="arcade-section" class="arcade-arena-section">
     <div class="container">
-      <div class="arcade-cabinet-wrapper">
+      <div class="arcade-cabinet-wrapper" id="arcadeCabinet">
         <div class="arcade-marquee">
           <span class="marquee-star">★</span>
           <h2>FLAPPY FLASH ARCADE ZONE</h2>
           <span class="marquee-star">★</span>
+          <button id="fullscreenToggleBtn" class="arcade-fs-btn" title="Mode Layar Penuh (Fullscreen)" aria-label="Toggle Fullscreen">
+            <span class="fs-icon">⛶</span>
+          </button>
         </div>
 
         <div class="arcade-body">
-          <div class="arcade-screen-bezel">
+          <div class="arcade-screen-bezel" id="arcadeScreenBezel">
             <canvas id="landingGameCanvas" width="288" height="480"></canvas>
             
+            <!-- Exit Fullscreen Floating Button -->
+            <button id="exitFullscreenBtn" class="exit-fs-btn" title="Keluar Layar Penuh (ESC)" aria-label="Keluar Fullscreen">
+              <span>✕ KELUAR FULLSCREEN</span>
+            </button>
+
             <div class="arcade-screen-overlay" id="arcadeOverlay">
               <div class="screen-instructions">
                 <p class="arcade-blink">TEKAN SPACE / KLIK</p>
@@ -281,7 +289,10 @@
           <div class="arcade-control-panel">
             <div class="control-key-display">
               <span class="key-cap" id="spaceKeyCap">SPACE</span>
-              <span class="key-desc">Lompat / Kepakkan Sayap</span>
+              <span class="key-desc">Lompat</span>
+              <button id="fullscreenBtn" class="pixel-btn-icon fs-control-btn" title="Mode Layar Penuh (Fullscreen)" aria-label="Layar Penuh">
+                <span id="fullscreenIcon">⛶</span>
+              </button>
             </div>
             <div class="arcade-scores">
               <div class="score-slot">
