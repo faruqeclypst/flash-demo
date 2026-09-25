@@ -856,24 +856,30 @@ function getModeAndBiome(score) {
 let currentMode = GAME_MODES.FLAPPY;
 let currentBiome = BIOMES.CITY;
 
-function updateHUDModeAndBiome() {
+// Mode Transition State (Jeda & Countdown antar mode)
+let modeTransition = {
+  active: false,
+  targetMode: '',
+  targetBiome: '',
+  timer: 0,
+  countdown: 3
+};
+
+function checkAndTriggerModeTransition() {
+  if (modeTransition.active) return;
   const mb = getModeAndBiome(miniScore);
   if (mb.mode !== currentMode) {
-    currentMode = mb.mode;
+    modeTransition.active = true;
+    modeTransition.targetMode = mb.mode;
+    modeTransition.targetBiome = mb.biome;
+    modeTransition.timer = 180; // 3 seconds at 60 FPS
+    modeTransition.countdown = 3;
+    invulnerableTimer = 240; // Grace period during countdown
     retroAudio.playModeSwitch();
-    miniShake.intensity = 8;
-    if (currentMode === GAME_MODES.DARAT) {
-      showModeBanner('🏃 MODE DARAT AKTIF!', '#22d3ee');
-      miniBird.y = MINI_GROUND_Y - miniBird.h;
-      miniBird.vy = 0;
-    } else if (currentMode === GAME_MODES.RAYMAN) {
-      showModeBanner('🚁 MODE RAYMAN AKTIF!', '#f43f5e');
-    } else {
-      showModeBanner('🕊️ MODE FLAPPY AKTIF!', '#fbbf24');
-    }
   }
-  currentBiome = mb.biome;
+}
 
+function updateHUDModeAndBiomeDisplay() {
   if (hudModeBadge) {
     if (currentMode === GAME_MODES.DARAT) {
       hudModeBadge.textContent = '🏃 DARAT';
@@ -901,6 +907,55 @@ function updateHUDModeAndBiome() {
   }
 }
 
+function updateHUDModeAndBiome() {
+  updateHUDModeAndBiomeDisplay();
+}
+
+function drawModeTransitionOverlay() {
+  if (!modeTransition.active || !ctx) return;
+  ctx.save();
+  // Translucent backdrop box
+  ctx.fillStyle = 'rgba(11, 17, 32, 0.94)';
+  ctx.fillRect(14, 105, MINI_WIDTH - 28, 160);
+  ctx.strokeStyle = '#facc15';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(14, 105, MINI_WIDTH - 28, 160);
+
+  // Warning Header
+  ctx.font = '8px "Press Start 2P", monospace';
+  ctx.fillStyle = '#ef4444';
+  ctx.textAlign = 'center';
+  ctx.fillText('⚠️ PERSIAPAN MODE BARU!', MINI_WIDTH / 2, 130);
+
+  // Target Mode
+  ctx.font = '8.5px "Press Start 2P", monospace';
+  ctx.fillStyle = '#38bdf8';
+  ctx.fillText(`MENUJU: ${modeTransition.targetMode}`, MINI_WIDTH / 2, 152);
+
+  // Big Countdown Number
+  ctx.font = '32px "Press Start 2P", monospace';
+  ctx.fillStyle = '#facc15';
+  ctx.fillText(modeTransition.countdown, MINI_WIDTH / 2, 198);
+
+  // Instructions for upcoming mode
+  ctx.font = '6.5px "Press Start 2P", monospace';
+  ctx.fillStyle = '#f8fafc';
+  let tip = 'KETUK SPACE UNTUK TERBANG';
+  let subTip = 'Lewati pipa & kumpulkan koin!';
+  if (modeTransition.targetMode === GAME_MODES.DARAT) {
+    tip = 'SPACE: LOMPAT (BISA 2X)!';
+    subTip = 'Injak zombie / lompati batu!';
+  } else if (modeTransition.targetMode === GAME_MODES.RAYMAN) {
+    tip = 'SPACE: BALING-BALING GLIDE!';
+    subTip = 'Meluncur di antara stalaktit!';
+  }
+  ctx.fillText(tip, MINI_WIDTH / 2, 230);
+  ctx.font = '6px "Press Start 2P", monospace';
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText(subTip, MINI_WIDTH / 2, 248);
+  ctx.restore();
+}
+
 // Mode / Checkpoint Announcement Banner
 let bannerText = '';
 let bannerColor = '#f9ca24';
@@ -924,20 +979,26 @@ function addMiniFloatingText(x, y, text, color = '#f9ca24') {
 const POWERUP_TYPES = {
   HEART:  { type: 'HEART',  emoji: '❤️', color: '#ef4444', label: '+1 NYAWA!' },
   SHIELD: { type: 'SHIELD', emoji: '🛡️', color: '#38bdf8', label: 'SHIELD AKTIF!' },
-  SLOWMO: { type: 'SLOWMO', emoji: '⏳', color: '#fbbf24', label: 'SLOW-MO 4s!' },
   MINI:   { type: 'MINI',   emoji: '💨', color: '#a855f7', label: 'MINI BIRD!' },
   COIN:   { type: 'COIN',   emoji: '🪙', color: '#eab308', label: '+3 KOIN!' }
 };
 
 let activeShield = false;
-let slowMoTimer = 0;
 let miniSizeTimer = 0;
 let powerUps = [];
 let powerUpTimer = 0;
+let pendingGuaranteedHeart = false;
+let pendingPowerUp = false;
+let nextPowerUpType = null;
 
 class PowerUpItem {
-  constructor(y, typeObj) {
-    this.x = MINI_WIDTH + 20;
+  constructor(x, y, typeObj) {
+    if (typeof typeObj === 'undefined') {
+      typeObj = y;
+      y = x;
+      x = MINI_WIDTH + 20;
+    }
+    this.x = (typeof x === 'number') ? x : (MINI_WIDTH + 20);
     this.baseY = y;
     this.y = y;
     this.w = 20;
@@ -1344,7 +1405,6 @@ const miniBird = {
     invulnerableTimer = 60; // 1s grace period on start
 
     activeShield = false;
-    slowMoTimer = 0;
     miniSizeTimer = 0;
 
     const mb = getModeAndBiome(miniScore);
@@ -1396,10 +1456,6 @@ const miniBird = {
 
     if (invulnerableTimer > 0) {
       invulnerableTimer--;
-    }
-
-    if (slowMoTimer > 0) {
-      slowMoTimer--;
     }
 
     if (miniState === MINI_STATES.PLAYING) {
@@ -1580,9 +1636,9 @@ function handleScoreIncrease() {
   // Guaranteed Heart Drop every 10 points!
   if (miniScore > 0 && miniScore % 10 === 0 && miniScore !== lastHeartSpawnScore) {
     lastHeartSpawnScore = miniScore;
-    const spawnY = 80 + Math.random() * (MINI_GROUND_Y - 170);
-    powerUps.push(new PowerUpItem(spawnY, POWERUP_TYPES.HEART));
-    addMiniFloatingText(MINI_WIDTH - 50, spawnY, '❤️ EXTRA LIFE!', '#ef4444');
+    pendingGuaranteedHeart = true;
+    showModeBanner('❤️ BONUS NYAWA MENANTI!', '#ef4444');
+    addMiniFloatingText(miniBird.x, miniBird.y - 18, '❤️ BONUS NYAWA!', '#ef4444');
   }
 
   // Checkpoint Every 20 points + 1 Life bonus!
@@ -1598,22 +1654,27 @@ function handleScoreIncrease() {
     addMiniFloatingText(miniBird.x, miniBird.y - 18, 'CHECKPOINT +1 NYAWA!', '#10b981');
   }
 
-  updateHUDModeAndBiome();
+  // Trigger mode transition check (with delay and countdown)
+  checkAndTriggerModeTransition();
 }
 
-// Spawner Logic for Mode-Specific Obstacles
+// Spawner Logic for Mode-Specific Obstacles with Logical Reachable Item Placements
 function updateObstacles() {
-  if (miniState !== MINI_STATES.PLAYING) return;
+  if (miniState !== MINI_STATES.PLAYING || modeTransition.active) return;
 
-  const worldSpeed = slowMoTimer > 0 ? 0.9 : 1.8;
+  const worldSpeed = 1.8;
 
-  // Power-Ups Spawner (Appears in all modes)
+  // Power-Ups Timer (Prepares item for logical placement on next upcoming obstacle)
   powerUpTimer++;
-  if (powerUpTimer >= 220) {
+  if (powerUpTimer >= 200 && !pendingPowerUp) {
     const pKeys = Object.keys(POWERUP_TYPES);
-    const chosenType = POWERUP_TYPES[pKeys[Math.floor(Math.random() * pKeys.length)]];
-    const spawnY = 70 + Math.random() * (MINI_GROUND_Y - 140);
-    powerUps.push(new PowerUpItem(spawnY, chosenType));
+    // If lives <= 1, 40% chance of emergency heart!
+    if (playerLives <= 1 && Math.random() < 0.4) {
+      nextPowerUpType = POWERUP_TYPES.HEART;
+    } else {
+      nextPowerUpType = POWERUP_TYPES[pKeys[Math.floor(Math.random() * pKeys.length)]];
+    }
+    pendingPowerUp = true;
     powerUpTimer = 0;
   }
 
@@ -1640,8 +1701,6 @@ function updateObstacles() {
         addMiniFloatingText(miniBird.x, miniBird.y - 14, `❤️ +1 NYAWA! [${playerLives}]`, '#ef4444');
       } else if (pu.type === 'SHIELD') {
         activeShield = true;
-      } else if (pu.type === 'SLOWMO') {
-        slowMoTimer = 240; // 4 seconds slow-mo
       } else if (pu.type === 'MINI') {
         miniSizeTimer = 300; // 5 seconds mini bird
       } else if (pu.type === 'COIN') {
@@ -1686,8 +1745,9 @@ function updateObstacles() {
         }
       }
 
+      const pipeX = MINI_WIDTH + 10;
       miniPipes.push({
-        x: MINI_WIDTH + 10,
+        x: pipeX,
         topHeight,
         bottomY,
         bottomHeight,
@@ -1701,6 +1761,17 @@ function updateObstacles() {
         minY: Math.max(30, topHeight - 35),
         maxY: Math.min(MINI_GROUND_Y - 96 - 25, topHeight + 35)
       });
+
+      // LOGICAL SPAWN: Place power-up DEAD-CENTER inside the safe pipe gap opening!
+      const gapMidY = topHeight + 48 - 10;
+      if (pendingGuaranteedHeart) {
+        powerUps.push(new PowerUpItem(pipeX + 13, gapMidY, POWERUP_TYPES.HEART));
+        pendingGuaranteedHeart = false;
+      } else if (pendingPowerUp && nextPowerUpType) {
+        powerUps.push(new PowerUpItem(pipeX + 13, gapMidY, nextPowerUpType));
+        pendingPowerUp = false;
+      }
+
       obstacleSpawnTimer = 0;
     }
 
@@ -1713,21 +1784,57 @@ function updateObstacles() {
   } else if (currentMode === GAME_MODES.DARAT) {
     // Mode 2: Zombie Tsunami style Ground Runner
     if (obstacleSpawnTimer >= 80) {
+      const obsX = MINI_WIDTH + 20;
       if (Math.random() < 0.6) {
         groundMonsters.push(new GroundMonster());
       } else {
         groundObstacles.push(new GroundObstacle());
       }
+
+      // LOGICAL SPAWN: At the JUMP APEX arc (MINI_GROUND_Y - 58) directly above obstacle,
+      // or at runner chest height (MINI_GROUND_Y - 24) on clear ground!
+      const jumpApexY = MINI_GROUND_Y - 58;
+      if (pendingGuaranteedHeart) {
+        powerUps.push(new PowerUpItem(obsX + 2, jumpApexY, POWERUP_TYPES.HEART));
+        pendingGuaranteedHeart = false;
+        addMiniFloatingText(obsX - 10, jumpApexY - 12, '❤️ LOMPAT!', '#ef4444');
+      } else if (pendingPowerUp && nextPowerUpType) {
+        const itemY = (Math.random() > 0.4) ? jumpApexY : (MINI_GROUND_Y - 24);
+        powerUps.push(new PowerUpItem(obsX + 2, itemY, nextPowerUpType));
+        pendingPowerUp = false;
+      }
+
       obstacleSpawnTimer = 0;
     }
   } else if (currentMode === GAME_MODES.RAYMAN) {
     // Mode 3: Lava Cave Stalactites & Fire Bats
     if (obstacleSpawnTimer >= 110) {
       if (Math.random() < 0.65) {
-        lavaStalactites.push(new LavaStalactite());
+        const ls = new LavaStalactite();
+        lavaStalactites.push(ls);
+
+        // LOGICAL SPAWN: In the safe corridor between ceiling stalactite & ground stalagmite!
+        const corridorMidY = ls.topHeight + ((ls.bottomY - ls.topHeight) / 2) - 10;
+        if (pendingGuaranteedHeart) {
+          powerUps.push(new PowerUpItem(ls.x + 10, corridorMidY, POWERUP_TYPES.HEART));
+          pendingGuaranteedHeart = false;
+          addMiniFloatingText(ls.x, corridorMidY - 12, '❤️ NYAWA GLIDE!', '#ef4444');
+        } else if (pendingPowerUp && nextPowerUpType) {
+          powerUps.push(new PowerUpItem(ls.x + 10, corridorMidY, nextPowerUpType));
+          pendingPowerUp = false;
+        }
       } else {
         const fy = 60 + Math.random() * (MINI_GROUND_Y - 140);
         fireBats.push(new FireBat(fy));
+
+        // If item pending, place in safe glide zone
+        if (pendingGuaranteedHeart || (pendingPowerUp && nextPowerUpType)) {
+          const type = pendingGuaranteedHeart ? POWERUP_TYPES.HEART : nextPowerUpType;
+          const safeY = fy > 200 ? (fy - 65) : (fy + 65);
+          powerUps.push(new PowerUpItem(MINI_WIDTH + 20, safeY, type));
+          pendingGuaranteedHeart = false;
+          pendingPowerUp = false;
+        }
       }
       obstacleSpawnTimer = 0;
     }
@@ -1986,36 +2093,34 @@ function triggerMiniGameOver() {
   if (arcadeOverlay) {
     arcadeOverlay.classList.remove('hidden');
     arcadeOverlay.innerHTML = `
-      <div class="screen-instructions" style="max-width: 260px; padding: 12px 14px;">
-        <p style="font-family: 'Press Start 2P'; font-size: 11px; color: #ef4444; margin-bottom: 6px;">GAME OVER</p>
-        <p style="font-family: 'Press Start 2P'; font-size: 9px; color: #f9ca24; margin-bottom: 4px;">SKOR: ${miniScore}</p>
-        <p style="font-size: 7.5px; color: #38bdf8; font-family: 'Press Start 2P'; margin-bottom: 8px;">"${title}"</p>
+      <div class="game-over-modal">
+        <h3 class="game-over-title">GAME OVER</h3>
+        <div class="game-over-score">SKOR: ${miniScore}</div>
+        <div class="game-over-rank">"${title}"</div>
 
         <!-- Hilarious Roasting Dialogue Bubble -->
-        <div style="background: rgba(239, 68, 68, 0.16); border: 2px dashed #ef4444; border-radius: 6px; padding: 8px 10px; margin: 8px 0; text-align: center; box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);">
-          <div style="font-size: 14px; margin-bottom: 3px;">💀🗯️</div>
-          <p style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: #fecaca; line-height: 1.5; margin: 0;">
-            "${roastQuote}"
-          </p>
+        <div class="game-over-roast">
+          <div class="game-over-roast-icon">💀🗯️</div>
+          <p class="game-over-roast-text">"${roastQuote}"</p>
         </div>
 
         ${isTopScore ? `
-          <div style="margin-bottom: 8px; background: rgba(0,0,0,0.5); padding: 6px; border: 1px solid #334155; border-radius: 4px;">
-            <label style="font-size: 7px; color: #cbd5e1; display: block; margin-bottom: 4px;">SIMPAN INISIAL (3 HURUF):</label>
-            <div style="display: flex; gap: 4px; justify-content: center;">
-              <input type="text" id="arcadeInitialsInput" maxlength="3" value="YOU" style="width: 60px; text-transform: uppercase; font-family: 'Press Start 2P'; font-size: 9px; text-align: center; background: #0f172a; color: #f9ca24; border: 1px solid #eab308; border-radius: 3px; padding: 2px 4px;" />
-              <button id="saveInitialsBtn" style="font-family: 'Press Start 2P'; font-size: 7px; background: #10b981; color: #000; border: none; padding: 3px 6px; border-radius: 3px; cursor: pointer;">SIMPAN</button>
+          <div class="game-over-initials-box">
+            <label class="game-over-initials-label">SIMPAN INISIAL (3 HURUF):</label>
+            <div class="game-over-initials-row">
+              <input type="text" id="arcadeInitialsInput" maxlength="3" value="YOU" class="game-over-input" />
+              <button id="saveInitialsBtn" class="game-over-btn-save">SIMPAN</button>
             </div>
           </div>
         ` : ''}
 
-        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+        <div class="game-over-actions">
           ${lastCheckpointScore > 0 ? `
-            <button id="respawnCheckpointBtn" style="font-family: 'Press Start 2P'; font-size: 7px; background: #0284c7; color: #fff; border: 2px solid #000; padding: 6px 8px; border-radius: 4px; cursor: pointer;">
+            <button id="respawnCheckpointBtn" class="game-over-btn-respawn">
               🚩 RESPAWN CHECKPOINT (${lastCheckpointScore} PTS)
             </button>
           ` : ''}
-          <button id="restartFromZeroBtn" style="font-family: 'Press Start 2P'; font-size: 7px; background: #f59e0b; color: #000; border: 2px solid #000; padding: 6px 8px; border-radius: 4px; cursor: pointer;">
+          <button id="restartFromZeroBtn" class="game-over-btn-restart">
             🔄 MAIN DARI AWAL
           </button>
         </div>
@@ -2061,6 +2166,9 @@ function startNewRun(fromCheckpoint = false) {
   miniFloatingTexts = [];
   obstacleSpawnTimer = 0;
   powerUpTimer = 0;
+  pendingGuaranteedHeart = false;
+  pendingPowerUp = false;
+  modeTransition.active = false;
 
   if (miniCurrentScore) miniCurrentScore.textContent = miniScore;
   if (arcadeOverlay) arcadeOverlay.classList.add('hidden');
@@ -2069,6 +2177,8 @@ function startNewRun(fromCheckpoint = false) {
 
 function handleMiniAction() {
   retroAudio.init();
+
+  if (modeTransition.active) return; // Prevent action during countdown
 
   if (miniState === MINI_STATES.IDLE) {
     startNewRun(false);
@@ -2437,6 +2547,66 @@ function updateMiniAllLogic() {
     return;
   }
 
+  // Jeda & Countdown Perpindahan Mode (Transisi Mulus & Adil Tanpa Kematian Mendadak)
+  if (modeTransition.active) {
+    modeTransition.timer--;
+    const sec = Math.ceil(modeTransition.timer / 60);
+    if (sec !== modeTransition.countdown) {
+      modeTransition.countdown = sec;
+      if (sec > 0) {
+        retroAudio.playBeep(sec === 1 ? 840 : 440, 0.08);
+      }
+    }
+
+    // Reposisi burung secara perlahan menuju ketinggian ideal mode tujuan
+    let targetY = 190;
+    if (modeTransition.targetMode === GAME_MODES.DARAT) {
+      targetY = MINI_GROUND_Y - miniBird.h;
+    } else if (modeTransition.targetMode === GAME_MODES.RAYMAN) {
+      targetY = 170;
+    }
+    miniBird.y += (targetY - miniBird.y) * 0.08;
+    miniBird.vy = 0;
+    miniBird.rotation *= 0.8;
+
+    // Bersihkan rintangan aktif ke kiri agar pemain mendapat lintasan baru yang bersih
+    const clearSpeed = 2.4;
+    for (let p of miniPipes) p.x -= clearSpeed;
+    for (let rb of miniRivalBirds) rb.x -= clearSpeed + 0.5;
+    for (let gm of groundMonsters) gm.x -= clearSpeed;
+    for (let go of groundObstacles) go.x -= clearSpeed;
+    for (let fb of fireBats) fb.x -= clearSpeed + 0.5;
+    for (let ls of lavaStalactites) ls.x -= clearSpeed;
+    for (let pu of powerUps) pu.x -= clearSpeed;
+
+    miniPipes = miniPipes.filter(p => p.x + p.width > -40);
+    miniRivalBirds = miniRivalBirds.filter(rb => rb.x + rb.w > -40);
+    groundMonsters = groundMonsters.filter(gm => gm.x + gm.w > -40);
+    groundObstacles = groundObstacles.filter(go => go.x + go.w > -40);
+    fireBats = fireBats.filter(fb => fb.x + fb.w > -40);
+    lavaStalactites = lavaStalactites.filter(ls => ls.x + ls.w > -40);
+    powerUps = powerUps.filter(pu => pu.x + pu.w > -40);
+
+    updateMiniFloatingTexts();
+
+    if (modeTransition.timer <= 0) {
+      modeTransition.active = false;
+      currentMode = modeTransition.targetMode;
+      currentBiome = modeTransition.targetBiome;
+      updateHUDModeAndBiomeDisplay();
+      obstacleSpawnTimer = 0;
+      invulnerableTimer = 75; // 1.25 detik kebal ekstra setelah mode baru aktif
+      retroAudio.playModeSwitch();
+      miniShake.intensity = 8;
+      showModeBanner(`🚀 ${currentMode} DIMULAI!`, '#22d3ee');
+      if (currentMode === GAME_MODES.DARAT) {
+        miniBird.y = MINI_GROUND_Y - miniBird.h;
+        miniBird.vy = 0;
+      }
+    }
+    return; // Hentikan kalkulasi fisika rintangan selama fase countdown
+  }
+
   miniBird.update();
   updateObstacles();
   checkMiniCollision();
@@ -2475,6 +2645,7 @@ function miniGameLoop(timestamp) {
     miniBird.draw();
     drawMiniFloatingTexts();
     drawModeBannerOverlay();
+    drawModeTransitionOverlay();
 
     if (miniState === MINI_STATES.PLAYING) {
       // Score in top center
@@ -2490,11 +2661,6 @@ function miniGameLoop(timestamp) {
       if (activeShield) {
         ctx.font = '12px sans-serif';
         ctx.fillText('🛡️', buffX, 40);
-        buffX += 18;
-      }
-      if (slowMoTimer > 0) {
-        ctx.font = '12px sans-serif';
-        ctx.fillText('⏳', buffX, 40);
         buffX += 18;
       }
       if (miniSizeTimer > 0) {

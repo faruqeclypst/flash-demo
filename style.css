@@ -996,37 +996,50 @@ section {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #0f172a;
+  background: #0b1120;
   border: 2px solid #000;
   border-radius: 6px;
   padding: 6px 10px;
   margin-bottom: 2px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .hud-lives {
   display: flex;
-  gap: 3px;
-  font-size: 14px;
-  filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.7));
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #334155;
 }
 
-.hud-lives .heart-dead {
-  filter: grayscale(100%) opacity(0.3);
+.heart-icon {
+  font-size: 15px;
+  display: inline-block;
+  line-height: 1;
+  filter: drop-shadow(0 0 5px #ef4444);
+}
+
+.heart-icon.heart-dead {
+  filter: grayscale(100%) opacity(0.2);
 }
 
 .hud-badges {
   display: flex;
   gap: 6px;
+  align-items: center;
 }
 
 .mode-badge, .biome-badge {
   font-family: var(--font-retro);
-  font-size: 7px;
-  padding: 3px 6px;
+  font-size: 7.5px;
+  padding: 4px 8px;
   border: 1px solid #000;
   border-radius: 4px;
   letter-spacing: 0.5px;
   box-shadow: 1px 1px 0 #000;
+  text-shadow: 1px 1px 0 #000;
 }
 
 .mode-badge {
@@ -1230,54 +1243,227 @@ section {
 .arcade-screen-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(12, 16, 23, 0.7);
+  background: rgba(10, 14, 23, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  pointer-events: none;
+  pointer-events: auto;
   transition: opacity 0.25s ease;
-}
-
-.exit-fs-btn {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 60;
-  background: #ef4444;
-  color: #ffffff;
-  font-family: var(--font-retro);
-  font-size: 8px;
-  padding: 8px 12px;
-  border: 2px solid #000;
-  box-shadow: 2px 2px 0 #000;
-  border-radius: 4px;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  transition: transform 0.08s ease, background 0.12s ease;
-}
-
-.exit-fs-btn:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
-}
-
-.exit-fs-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 #000;
+  line-height: normal;
+  z-index: 50;
+  padding: 10px;
 }
 
 .arcade-screen-overlay.hidden {
   opacity: 0;
+  pointer-events: none;
 }
 
 .screen-instructions {
-  background: rgba(15, 23, 42, 0.95);
+  background: #0f172a;
   border: 3px solid #000;
+  border-radius: 8px;
+  padding: 16px 14px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.95), 0 0 15px rgba(249, 202, 36, 0.25);
+  width: 100%;
+  max-width: 260px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.screen-instructions p {
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Dedicated Game Over Card with Guaranteed Zero-Overlap */
+.game-over-modal {
+  background: #0f172a;
+  border: 3px solid #ef4444;
+  border-radius: 8px;
+  padding: 14px 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.95), 0 0 15px rgba(239, 68, 68, 0.4);
+  width: 100%;
+  max-width: 255px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  line-height: normal;
+}
+
+.game-over-modal * {
+  box-sizing: border-box;
+}
+
+.game-over-title {
+  font-family: var(--font-retro);
+  font-size: 13px;
+  color: #ef4444;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0 #000;
+  margin: 0 0 2px 0;
+  line-height: 1.2;
+}
+
+.game-over-score {
+  font-family: var(--font-retro);
+  font-size: 10px;
+  color: #facc15;
+  text-shadow: 1px 1px 0 #000;
+  margin: 0 0 2px 0;
+  line-height: 1.2;
+}
+
+.game-over-rank {
+  font-family: var(--font-retro);
+  font-size: 7.5px;
+  color: #38bdf8;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.game-over-roast {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.14);
+  border: 2px dashed #ef4444;
   border-radius: 6px;
-  padding: 14px 20px;
-  box-shadow: 4px 4px 0 #000;
+  padding: 8px 10px;
+  margin: 2px 0 4px 0;
+  text-align: center;
+  box-shadow: inset 0 0 8px rgba(239, 68, 68, 0.2);
+}
+
+.game-over-roast-icon {
+  font-size: 14px;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+
+.game-over-roast-text {
+  font-family: var(--font-retro), monospace;
+  font-size: 7px;
+  color: #fee2e2;
+  line-height: 1.5;
+  margin: 0;
+  word-break: break-word;
+}
+
+.game-over-initials-box {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.game-over-initials-label {
+  font-size: 6.8px;
+  font-family: var(--font-retro);
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.game-over-initials-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+}
+
+.game-over-input {
+  width: 65px;
+  background: #0b1120;
+  border: 2px solid #eab308;
+  border-radius: 4px;
+  color: #facc15;
+  font-family: var(--font-retro);
+  font-size: 9.5px;
+  text-align: center;
+  padding: 4px 2px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.game-over-input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 6px rgba(234, 179, 8, 0.5);
+}
+
+.game-over-btn-save {
+  background: #10b981;
+  color: #000;
+  border: 2px solid #000;
+  font-family: var(--font-retro);
+  font-size: 7.5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.08s ease, background 0.12s ease;
+}
+
+.game-over-btn-save:hover {
+  background: #059669;
+}
+
+.game-over-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.game-over-btn-respawn {
+  width: 100%;
+  background: #0284c7;
+  color: #ffffff;
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  font-family: var(--font-retro);
+  font-size: 7px;
+  padding: 7px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: transform 0.08s ease;
+}
+
+.game-over-btn-respawn:hover {
+  background: #0369a1;
+  transform: translateY(-1px);
+}
+
+.game-over-btn-restart {
+  width: 100%;
+  background: #f59e0b;
+  color: #000000;
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  font-family: var(--font-retro);
+  font-size: 7px;
+  padding: 7px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: transform 0.08s ease;
+}
+
+.game-over-btn-restart:hover {
+  background: #d97706;
+  transform: translateY(-1px);
 }
 
 .arcade-blink {
@@ -1285,6 +1471,7 @@ section {
   font-size: 10px;
   color: var(--flappy-yellow);
   margin-bottom: 6px;
+  line-height: 1.4;
   animation: blinkText 1.2s infinite;
 }
 
@@ -1297,6 +1484,7 @@ section {
   font-family: var(--font-retro);
   font-size: 8px;
   color: #fff;
+  line-height: 1.4;
 }
 
 .arcade-control-panel {
