@@ -259,57 +259,144 @@
   <!-- ==================== EMBEDDED PLAYABLE MINI-GAME ==================== -->
   <section id="arcade-section" class="arcade-arena-section">
     <div class="container">
-      <div class="arcade-cabinet-wrapper" id="arcadeCabinet">
-        <div class="arcade-marquee">
-          <span class="marquee-star">★</span>
-          <h2>FLAPPY FLASH ARCADE ZONE</h2>
-          <span class="marquee-star">★</span>
-          <button id="fullscreenToggleBtn" class="arcade-fs-btn" title="Mode Layar Penuh (Fullscreen)" aria-label="Toggle Fullscreen">
-            <span class="fs-icon">⛶</span>
-          </button>
+      <div class="arcade-dashboard-grid">
+        
+        <!-- Left: Skin Picker & Game Info Card -->
+        <div class="arcade-side-panel left-panel">
+          <div class="side-card pixel-window-card">
+            <div class="window-header">
+              <div class="window-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <div class="window-title">PILIS_SKIN.EXE</div>
+            </div>
+            <div class="side-card-body">
+              <h3 class="side-card-title">KUSTOMISASI BURUNG</h3>
+              <p class="side-card-desc">Pilih skin jagoanmu sebelum bertanding:</p>
+              <div class="skin-selector-grid" id="skinSelector">
+                <button class="skin-btn active" data-skin="classic" title="Burung Klasik Kuning">
+                  <span class="skin-emoji">🟡</span>
+                  <span class="skin-name">KLASIK</span>
+                </button>
+                <button class="skin-btn" data-skin="cowboy" title="Burung Koboi FLASH (Wild West)">
+                  <span class="skin-emoji">🤠</span>
+                  <span class="skin-name">KOBOI</span>
+                </button>
+                <button class="skin-btn" data-skin="student" title="Burung Pelajar SMAN Modal Bangsa">
+                  <span class="skin-emoji">🎓</span>
+                  <span class="skin-name">MOSA</span>
+                </button>
+                <button class="skin-btn" data-skin="cyber" title="Burung Emas Cyberpunk">
+                  <span class="skin-emoji">🤖</span>
+                  <span class="skin-name">CYBER</span>
+                </button>
+              </div>
+
+              <!-- Power-Ups Info Guide -->
+              <div class="powerup-legend-box mt-4">
+                <div class="legend-header">⚡ POWER-UPS DI UDARA</div>
+                <ul class="legend-list">
+                  <li><span class="leg-icon">❤️</span> <strong>Nyawa (+1):</strong> Tambah nyawa / heal</li>
+                  <li><span class="leg-icon">🛡️</span> <strong>Shield:</strong> Kebal 1x tabrakan</li>
+                  <li><span class="leg-icon">⏳</span> <strong>Slow-Mo:</strong> Waktu lambat 4 dtk</li>
+                  <li><span class="leg-icon">💨</span> <strong>Mini:</strong> Ukuran menyusut 60%</li>
+                  <li><span class="leg-icon">🪙</span> <strong>Koin:</strong> Bonus instan +3 skor</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="arcade-body">
-          <div class="arcade-screen-bezel" id="arcadeScreenBezel">
-            <canvas id="landingGameCanvas" width="288" height="480"></canvas>
-            
-            <!-- Exit Fullscreen Floating Button -->
-            <button id="exitFullscreenBtn" class="exit-fs-btn" title="Keluar Layar Penuh (ESC)" aria-label="Keluar Fullscreen">
-              <span>✕ KELUAR FULLSCREEN</span>
+        <!-- Center: Main Arcade Cabinet -->
+        <div class="arcade-cabinet-wrapper" id="arcadeCabinet">
+          <div class="arcade-marquee">
+            <span class="marquee-star">★</span>
+            <h2>FLAPPY FLASH ARCADE ZONE</h2>
+            <span class="marquee-star">★</span>
+            <button id="fullscreenToggleBtn" class="arcade-fs-btn" title="Mode Layar Penuh (Fullscreen)" aria-label="Toggle Fullscreen">
+              <span class="fs-icon">⛶</span>
             </button>
-
-            <div class="arcade-screen-overlay" id="arcadeOverlay">
-              <div class="screen-instructions">
-                <p class="arcade-blink">TEKAN SPACE / KLIK</p>
-                <p class="arcade-sub">UNTUK MEMULAI GAME</p>
-              </div>
-            </div>
           </div>
 
-          <div class="arcade-control-panel">
-            <div class="control-key-display">
-              <span class="key-cap" id="spaceKeyCap">SPACE</span>
-              <span class="key-desc">Lompat</span>
-              <button id="fullscreenBtn" class="pixel-btn-icon fs-control-btn" title="Mode Layar Penuh (Fullscreen)" aria-label="Layar Penuh">
-                <span id="fullscreenIcon">⛶</span>
+          <div class="arcade-body">
+            <!-- HUD Atas: Nyawa, Mode, Biome -->
+            <div class="arcade-top-hud">
+              <div class="hud-lives" id="hudLives" title="Nyawa Tersisa">
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+                <span class="heart-icon">❤️</span>
+              </div>
+              <div class="hud-badges">
+                <span class="mode-badge" id="hudModeBadge">🕊️ FLAPPY</span>
+                <span class="biome-badge" id="hudBiomeBadge">🏙️ KOTA</span>
+              </div>
+            </div>
+
+            <div class="arcade-screen-bezel" id="arcadeScreenBezel">
+              <canvas id="landingGameCanvas" width="288" height="480"></canvas>
+              
+              <!-- Exit Fullscreen Floating Button -->
+              <button id="exitFullscreenBtn" class="exit-fs-btn" title="Keluar Layar Penuh (ESC)" aria-label="Keluar Fullscreen">
+                <span>✕ KELUAR FULLSCREEN</span>
               </button>
-            </div>
-            <div class="arcade-scores">
-              <div class="score-slot">
-                <span class="score-label">SKOR</span>
-                <span class="score-val" id="miniCurrentScore">0</span>
+
+              <div class="arcade-screen-overlay" id="arcadeOverlay">
+                <div class="screen-instructions">
+                  <p class="arcade-blink">TEKAN SPACE / KLIK</p>
+                  <p class="arcade-sub">UNTUK MEMULAI GAME</p>
+                </div>
               </div>
-              <div class="score-slot">
-                <span class="score-label">TERBAIK</span>
-                <span class="score-val" id="miniHighScore">0</span>
+            </div>
+
+            <div class="arcade-control-panel">
+              <div class="control-key-display">
+                <span class="key-cap" id="spaceKeyCap">SPACE</span>
+                <span class="key-desc">Lompat</span>
+                <button id="fullscreenBtn" class="pixel-btn-icon fs-control-btn" title="Mode Layar Penuh (Fullscreen)" aria-label="Layar Penuh">
+                  <span id="fullscreenIcon">⛶</span>
+                </button>
+              </div>
+              <div class="arcade-scores">
+                <div class="score-slot">
+                  <span class="score-label">SKOR</span>
+                  <span class="score-val" id="miniCurrentScore">0</span>
+                </div>
+                <div class="score-slot">
+                  <span class="score-label">TERBAIK</span>
+                  <span class="score-val" id="miniHighScore">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arcade-footer-text">
+            <span>🕹️ <strong>3 NYAWA</strong> • Checkpoint tiap 20 poin • Mode berubah di skor 15 & 25!</span>
+          </div>
+        </div>
+
+        <!-- Right: Top 5 Arcade Leaderboard -->
+        <div class="arcade-side-panel right-panel">
+          <div class="side-card pixel-window-card">
+            <div class="window-header">
+              <div class="window-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <div class="window-title">HALL_OF_FAME.DAT</div>
+            </div>
+            <div class="side-card-body">
+              <h3 class="side-card-title">🏆 TOP 5 LEADERBOARD</h3>
+              <p class="side-card-desc">Papan peringkat skor tertinggi lokal:</p>
+              
+              <div class="leaderboard-table" id="leaderboardList">
+                <!-- Di-render oleh JavaScript -->
+              </div>
+
+              <!-- Share to WhatsApp Button -->
+              <div class="mt-4">
+                <button id="shareWaBtn" class="pixel-btn pixel-btn-green w-full text-center" title="Bagikan skor ke WhatsApp">
+                  <span>📢 PAMER SKOR KE WA</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="arcade-footer-text">
-          <span>🕹️ Uji ketangkasan dan fokusmu sebelum bertanding di FLASH XXV PERSEVERANCE!</span>
-        </div>
       </div>
     </div>
   </section>

@@ -870,7 +870,269 @@ section {
   border-bottom: 4px solid #000;
 }
 
+.arcade-dashboard-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(320px, 440px) 280px;
+  gap: 24px;
+  align-items: start;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1100px;
+}
+
+@media (max-width: 1024px) {
+  .arcade-dashboard-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+  .arcade-side-panel {
+    order: 2;
+  }
+  .arcade-cabinet-wrapper {
+    order: 1;
+  }
+}
+
+.arcade-side-panel .side-card {
+  height: 100%;
+}
+
+.side-card-body {
+  padding: 16px;
+}
+
+.side-card-title {
+  font-family: var(--font-retro);
+  font-size: 11px;
+  color: var(--flappy-yellow);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.side-card-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.skin-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.skin-btn {
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.skin-btn:hover {
+  border-color: var(--flappy-yellow);
+  transform: translateY(-2px);
+  background: #1e293b;
+}
+
+.skin-btn.active {
+  background: rgba(249, 202, 36, 0.15);
+  border-color: var(--flappy-yellow);
+  box-shadow: 0 0 10px rgba(249, 202, 36, 0.35);
+}
+
+.skin-emoji {
+  font-size: 20px;
+}
+
+.skin-name {
+  font-family: var(--font-retro);
+  font-size: 8px;
+  color: #f8fafc;
+  letter-spacing: 0.5px;
+}
+
+.powerup-legend-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px dashed #334155;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.legend-header {
+  font-family: var(--font-retro);
+  font-size: 8px;
+  color: var(--neon-cyan);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.legend-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.leg-icon {
+  font-size: 13px;
+  margin-right: 4px;
+}
+
+/* TOP HUD INSIDE ARCADE */
+.arcade-top-hud {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+  border: 2px solid #000;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 2px;
+}
+
+.hud-lives {
+  display: flex;
+  gap: 3px;
+  font-size: 14px;
+  filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.7));
+}
+
+.hud-lives .heart-dead {
+  filter: grayscale(100%) opacity(0.3);
+}
+
+.hud-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.mode-badge, .biome-badge {
+  font-family: var(--font-retro);
+  font-size: 7px;
+  padding: 3px 6px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  box-shadow: 1px 1px 0 #000;
+}
+
+.mode-badge {
+  background: #7c3aed;
+  color: #fff;
+}
+
+.biome-badge {
+  background: #0284c7;
+  color: #fff;
+}
+
+/* LEADERBOARD TABLE */
+.leaderboard-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: var(--font-retro);
+  font-size: 8px;
+  transition: transform 0.1s ease;
+}
+
+.lb-row:hover {
+  transform: translateX(2px);
+  border-color: #64748b;
+}
+
+.lb-row.rank-1 {
+  border-color: #eab308;
+  background: rgba(234, 179, 8, 0.12);
+  color: #fef08a;
+}
+
+.lb-row.rank-2 {
+  border-color: #94a3b8;
+  background: rgba(148, 163, 184, 0.1);
+  color: #f1f5f9;
+}
+
+.lb-row.rank-3 {
+  border-color: #d97706;
+  background: rgba(217, 119, 6, 0.1);
+  color: #fed7aa;
+}
+
+.lb-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-rank {
+  font-size: 10px;
+  width: 18px;
+}
+
+.lb-player {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-name {
+  color: #f8fafc;
+  letter-spacing: 1px;
+  font-size: 9px;
+}
+
+.lb-title {
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.lb-score {
+  font-size: 11px;
+  color: var(--flappy-yellow);
+  text-shadow: 1px 1px 0 #000;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.pixel-btn-green {
+  background: #10b981;
+  color: #022c22;
+  border-color: #000;
+}
+
+.pixel-btn-green:hover {
+  background: #34d399;
+}
+
 .arcade-cabinet-wrapper {
+  width: 100%;
   max-width: 440px;
   margin: 0 auto;
   background: #1e293b;
