@@ -757,12 +757,19 @@ function addFloatingText(x, y, text, color = '#f9ca24') {
   });
 }
 
-function updateAndDrawFloatingTexts() {
+function updateFloatingTexts() {
   for (let i = floatingTexts.length - 1; i >= 0; i--) {
     const ft = floatingTexts[i];
     ft.y -= 0.8;
     ft.life--;
+    if (ft.life <= 0) {
+      floatingTexts.splice(i, 1);
+    }
+  }
+}
 
+function drawFloatingTexts() {
+  for (let ft of floatingTexts) {
     ctx.save();
     ctx.font = '10px "Press Start 2P", monospace';
     ctx.fillStyle = '#000000';
@@ -770,10 +777,6 @@ function updateAndDrawFloatingTexts() {
     ctx.fillStyle = ft.color;
     ctx.fillText(ft.text, ft.x, ft.y);
     ctx.restore();
-
-    if (ft.life <= 0) {
-      floatingTexts.splice(i, 1);
-    }
   }
 }
 
@@ -794,25 +797,35 @@ function createParticles(x, y, color, count) {
   }
 }
 
-function updateAndDrawParticles() {
+function updateParticles() {
   for (let i = particles.length - 1; i >= 0; i--) {
     const pt = particles[i];
     pt.x += pt.vx;
     pt.y += pt.vy;
     pt.life--;
-
-    ctx.fillStyle = pt.color;
-    ctx.fillRect(Math.floor(pt.x), Math.floor(pt.y), pt.size, pt.size);
-
     if (pt.life <= 0) {
       particles.splice(i, 1);
     }
   }
 }
 
+function drawParticles() {
+  for (let pt of particles) {
+    ctx.fillStyle = pt.color;
+    ctx.fillRect(Math.floor(pt.x), Math.floor(pt.y), pt.size, pt.size);
+  }
+}
+
 // 10. LATAR BELAKANG PIXEL DINAMIS (BERUBAH MERAH SAAT LEVEL NGESELIN)
 let groundOffset = 0;
 let cloudOffset = 0;
+
+function updateBackground() {
+  cloudOffset = (cloudOffset + 0.3) % CANVAS_WIDTH;
+  if (currentState === STATES.PLAYING) {
+    groundOffset = (groundOffset + PIPE_SPEED) % 18;
+  }
+}
 
 function drawBackground() {
   // Warna Langit Berubah Saat Level Ngeselin (Skor >= 10)
@@ -835,7 +848,6 @@ function drawBackground() {
   }
 
   // Awan Bergerak
-  cloudOffset = (cloudOffset + 0.3) % CANVAS_WIDTH;
   ctx.fillStyle = score >= 10 ? 'rgba(255, 200, 220, 0.6)' : '#ffffff';
   drawPixelCloud(60 - cloudOffset, 60, 48);
   drawPixelCloud(220 - cloudOffset, 90, 60);
@@ -858,11 +870,6 @@ function drawBackground() {
       }
     }
     ctx.fillStyle = score >= 10 ? '#500724' : '#80dfe9';
-  }
-
-  // Permukaan Tanah
-  if (currentState === STATES.PLAYING) {
-    groundOffset = (groundOffset + PIPE_SPEED) % 18;
   }
 
   ctx.fillStyle = '#2ed573';
@@ -1034,28 +1041,56 @@ canvas.addEventListener('pointerdown', (e) => {
   handleAction();
 });
 
-// 13. MAIN GAME LOOP
-function gameLoop() {
+// 13. FIXED TIMESTEP 60 FPS GAME LOOP (STABIL DI SEMUA MONITOR & BROWSER)
+let lastTimestamp = 0;
+const FIXED_STEP = 1000 / 60; // 16.6667ms per frame
+let logicAccumulator = 0;
+
+function updateAllGameLogic() {
   bird.update();
   updatePipes();
   checkCollision();
+  updateParticles();
+  updateFloatingTexts();
+  updateBackground();
 
-  // Screen shake processing
+  // Screen shake decay pada 60 ticks per detik
+  if (screenShake.intensity > 0) {
+    screenShake.intensity *= screenShake.decay;
+    if (screenShake.intensity < 0.2) screenShake.intensity = 0;
+  }
+}
+
+function gameLoop(timestamp) {
+  if (!lastTimestamp) lastTimestamp = timestamp;
+  let elapsed = timestamp - lastTimestamp;
+  lastTimestamp = timestamp;
+
+  // Batasi akumulasi jika lag spike atau tab tidak aktif (maks 100ms)
+  if (elapsed > 100) elapsed = 100;
+
+  logicAccumulator += elapsed;
+
+  // Update fisika dan logika pada fixed 60 FPS
+  while (logicAccumulator >= FIXED_STEP) {
+    updateAllGameLogic();
+    logicAccumulator -= FIXED_STEP;
+  }
+
+  // Render Grafis
   ctx.save();
   if (screenShake.intensity > 0) {
     const rx = (Math.random() - 0.5) * screenShake.intensity;
     const ry = (Math.random() - 0.5) * screenShake.intensity;
     ctx.translate(rx, ry);
-    screenShake.intensity *= screenShake.decay;
-    if (screenShake.intensity < 0.2) screenShake.intensity = 0;
   }
 
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   drawBackground();
   drawPipes();
   bird.draw();
-  updateAndDrawParticles();
-  updateAndDrawFloatingTexts();
+  drawParticles();
+  drawFloatingTexts();
   drawUI();
 
   ctx.restore();

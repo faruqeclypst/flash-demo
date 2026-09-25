@@ -1175,38 +1175,69 @@ arcadeOverlay?.addEventListener('pointerdown', (e) => {
   handleMiniAction();
 });
 
-function miniGameLoop() {
+// FIXED TIMESTEP 60 FPS GAME LOOP UNTUK MINI GAME (STABIL DI SEMUA MONITOR/BROWSER)
+let miniLastTimestamp = 0;
+const MINI_FIXED_STEP = 1000 / 60; // 16.6667ms per frame
+let miniAccumulator = 0;
+
+function updateMiniFloatingTexts() {
+  for (let i = miniFloatingTexts.length - 1; i >= 0; i--) {
+    const ft = miniFloatingTexts[i];
+    ft.y -= 0.8;
+    ft.life--;
+    if (ft.life <= 0) miniFloatingTexts.splice(i, 1);
+  }
+}
+
+function drawMiniFloatingTexts() {
+  for (let ft of miniFloatingTexts) {
+    ctx.font = '8px "Press Start 2P", monospace';
+    ctx.fillStyle = '#000000';
+    ctx.fillText(ft.text, ft.x + 1, ft.y + 1);
+    ctx.fillStyle = ft.color;
+    ctx.fillText(ft.text, ft.x, ft.y);
+  }
+}
+
+function updateMiniAllLogic() {
+  miniBird.update();
+  updateMiniPipes();
+  checkMiniCollision();
+  updateMiniFloatingTexts();
+
+  if (miniShake.intensity > 0) {
+    miniShake.intensity *= miniShake.decay;
+    if (miniShake.intensity < 0.2) miniShake.intensity = 0;
+  }
+}
+
+function miniGameLoop(timestamp) {
   if (ctx) {
-    miniBird.update();
-    updateMiniPipes();
-    checkMiniCollision();
+    if (!miniLastTimestamp) miniLastTimestamp = timestamp;
+    let elapsed = timestamp - miniLastTimestamp;
+    miniLastTimestamp = timestamp;
+
+    if (elapsed > 100) elapsed = 100;
+    miniAccumulator += elapsed;
+
+    // Jalankan logika fisika pada frekuensi pasti 60 FPS
+    while (miniAccumulator >= MINI_FIXED_STEP) {
+      updateMiniAllLogic();
+      miniAccumulator -= MINI_FIXED_STEP;
+    }
 
     ctx.save();
     if (miniShake.intensity > 0) {
       const rx = (Math.random() - 0.5) * miniShake.intensity;
       const ry = (Math.random() - 0.5) * miniShake.intensity;
       ctx.translate(rx, ry);
-      miniShake.intensity *= miniShake.decay;
-      if (miniShake.intensity < 0.2) miniShake.intensity = 0;
     }
 
     ctx.clearRect(0, 0, MINI_WIDTH, MINI_HEIGHT);
     drawMiniBackground();
     drawMiniPipes();
     miniBird.draw();
-
-    // Render Floating Text
-    for (let i = miniFloatingTexts.length - 1; i >= 0; i--) {
-      const ft = miniFloatingTexts[i];
-      ft.y -= 0.8;
-      ft.life--;
-      ctx.font = '8px "Press Start 2P", monospace';
-      ctx.fillStyle = '#000000';
-      ctx.fillText(ft.text, ft.x + 1, ft.y + 1);
-      ctx.fillStyle = ft.color;
-      ctx.fillText(ft.text, ft.x, ft.y);
-      if (ft.life <= 0) miniFloatingTexts.splice(i, 1);
-    }
+    drawMiniFloatingTexts();
 
     if (miniState === MINI_STATES.PLAYING) {
       ctx.font = '18px "Press Start 2P", monospace';
